@@ -37,6 +37,7 @@ OPCION_SALIR: Final[int] = 9
 # ---------------------------------------------------------------------------
 
 
+
 # ---------------------------------------------------------------------------
 # Excepciones propias de la pareja. Aquí va SemanaNoValida (opción 7).
 # ---------------------------------------------------------------------------
@@ -56,11 +57,19 @@ def tasa_caidas(descargas: int, caidas: int) -> float:
 
 def estado(descargas: int, caidas: int) -> str:
     """Devuelve el estado de una semana según su tasa de caídas.
-
-    Es uno de estos textos: "Estable", "Aceptable", "Revisar", "Crítica" o
-    "Mantenimiento", este último si la semana no tiene descargas.
-    """
-    return PENDIENTE                  # provisional
+    Se usa un primer condicional para retornar mantenimiento y después con tasa caidas vamos
+    usando if y elif para ir devolviendo los estados. Se usa '<' porque los umbrales dicen menos de"""
+    if descargas == 0:
+        return "Mantenimiento"
+    tasa = tasa_caidas(descargas, caidas)
+    if tasa < UMBRAL_ESTABLE:
+        return "Estable"
+    elif tasa < UMBRAL_ACEPTABLE:
+        return "Aceptable"
+    elif tasa < UMBRAL_REVISAR:
+        return "Revisar"
+    else:
+        return "Crítica"                  
 
 
 def pedir_entero(mensaje: str, minimo: int, maximo: int) -> int:
@@ -163,8 +172,34 @@ def opcion_2_resumen() -> None:
 
 
 def opcion_3_estabilidad() -> None:
-    """[Docstring: qué hace esta opción.]"""
-    print(PENDIENTE)
+    """Muestra el estado de cada semana y cuántas hay de cada estado"""
+    contador_estables = 0
+    contador_aceptables = 0
+    contador_revisar = 0
+    contador_criticas = 0
+    contador_mantenimiento = 0
+    for semana, (descargas, caidas) in enumerate(
+            zip(DESCARGAS, CAIDAS), start=1):
+        estado_semana = estado(descargas, caidas)
+        print(f"Semana {semana}: {estado_semana}")
+        match estado_semana:
+            case "Estable":
+                contador_estables += 1
+            case "Aceptable":
+                contador_aceptables += 1
+            case "Revisar":
+                contador_revisar += 1
+            case "Crítica":
+                contador_criticas += 1
+            case "Mantenimiento":
+                contador_mantenimiento += 1
+    
+    print("-" * ANCHO)
+    print(f"Estables: {contador_estables}")
+    print(f"Aceptables: {contador_aceptables}")
+    print(f"Revisar: {contador_revisar}")
+    print(f"Críticas: {contador_criticas}")
+    print(f"Mantenimiento: {contador_mantenimiento}")
 
 
 def opcion_4_umbral() -> None:
