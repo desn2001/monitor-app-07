@@ -125,7 +125,7 @@ def opcion_2_resumen() -> None:
     activas = 0
     mas = 0
     semana_mas = 0
-    menos = 0
+    menos = float('inf')
     semana_menos = 0
     for semana, (descargas, caidas) in enumerate(
             zip(DESCARGAS, CAIDAS), start=1):
