@@ -37,7 +37,11 @@ OPCION_SALIR: Final[int] = 9
 # ---------------------------------------------------------------------------
 UMBRAL_MINIMO: Final[float] = 0.0
 UMBRAL_MAXIMO: Final[float] = 1000.0
-
+MAX_OBJETIVO: Final[int] = 1_000_000
+CRECIMIENTO_MINIMO: Final[float] = 0.5
+CRECIMIENTO_MAXIMO: Final[float] = 50.0
+MAX_SEMANAS_PREVISION: Final[int] = 104
+PORCENTAJE: Final[int] = 100
 
 # ---------------------------------------------------------------------------
 # Excepciones propias de la pareja. Aquí va SemanaNoValida (opción 7).
@@ -79,7 +83,17 @@ def pedir_entero(mensaje: str, minimo: int, maximo: int) -> int:
     Si se escribe algo que no es un entero o está fuera de rango, avisa y
     lo vuelve a pedir.
     """
-    return minimo                     # provisional
+    while True:
+        try:
+            entero = int(input(mensaje))
+        except ValueError:
+            print("Error: Debes introducir un número entero")
+            continue
+
+        if minimo <= entero <= maximo:
+            return entero
+        else:
+            print(f"Error: Introduce un número entre {minimo} y {maximo}")
 
 
 def pedir_real(mensaje: str, minimo: float, maximo: float) -> float:
@@ -257,8 +271,52 @@ def opcion_5_racha() -> None:
 
 
 def opcion_6_prevision() -> None:
-    """[Docstring: qué hace esta opción.]"""
-    print(PENDIENTE)
+    """Calcula las semanas necesarias para alcanzar un objetivo de descargas."""
+    ultima_descarga = 0
+
+    for descargas in DESCARGAS:
+        if descargas > 0:
+            ultima_descarga = descargas
+
+    print(f"Descargas de la última semana activa: {ultima_descarga}")
+
+    objetivo = pedir_entero(
+        "Objetivo semanal de descargas: ",
+        minimo=ultima_descarga + 1,
+        maximo=MAX_OBJETIVO
+    )
+
+    crecimiento = pedir_real(
+        "Crecimiento semanal en %: ",
+        minimo=CRECIMIENTO_MINIMO,
+        maximo=CRECIMIENTO_MAXIMO
+    )
+
+    descargas_previstas = float(ultima_descarga)
+    semanas = 0
+
+    while descargas_previstas < objetivo:
+
+        if semanas >= MAX_SEMANAS_PREVISION:
+            break
+
+        aumento = descargas_previstas * crecimiento / PORCENTAJE
+
+        descargas_previstas += aumento
+
+        semanas += 1
+
+    if descargas_previstas >= objetivo:
+        print(
+            f"Se alcanza en {semanas} semanas "
+            f"({descargas_previstas:.0f} descargas)"
+        )
+    else:
+        print(
+            f"No se alcanza el objetivo en "
+            f"{MAX_SEMANAS_PREVISION} semanas."
+        )
+
 
 
 def opcion_7_consulta() -> None:
