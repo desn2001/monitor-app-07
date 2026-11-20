@@ -124,8 +124,9 @@ def opcion_2_resumen() -> None:
     total_caidas = 0
     activas = 0
     mas = 0
-    semana_mas = 0
+    semana_mas = 
     menos = float('inf')
+    menos = float('inf') 
     semana_menos = 0
     for semana, (descargas, caidas) in enumerate(
             zip(DESCARGAS, CAIDAS), start=1):
@@ -136,7 +137,7 @@ def opcion_2_resumen() -> None:
         total_caidas += caidas
         if descargas > mas:
             mas = descargas
-        semana_mas = semana
+            semana_mas = semana 
         if descargas < menos:
             menos = descargas
             semana_menos = semana
