@@ -230,8 +230,30 @@ def opcion_4_umbral() -> None:
 
 
 def opcion_5_racha() -> None:
-    """[Docstring: qué hace esta opción.]"""
-    print(PENDIENTE)
+    """Muestra la racha más larga Estable o Aceptable"""
+    racha_actual = 0
+    semana_inicio_actual = 0
+    mejor_racha = 0
+    semana_inicio_mejor = 0
+    for semana, (descargas, caidas) in enumerate(
+            zip(DESCARGAS, CAIDAS), start=1):
+        estado_semana = estado(descargas, caidas)
+        if estado_semana == "Mantenimiento":
+            continue
+        match estado_semana:
+            case "Estable" | "Aceptable":
+                if racha_actual == 0:
+                    semana_inicio_actual = semana
+                racha_actual += 1
+                if racha_actual > mejor_racha:
+                    mejor_racha = racha_actual
+                    semana_inicio_mejor = semana_inicio_actual
+            case "Revisar" | "Crítica":
+                racha_actual = 0
+    if mejor_racha == 0:
+        print("No ha habido ninguna semana que no haya tenido problemas")
+    else:
+        print(f"Mejor racha: {mejor_racha} semanas, " f"desde la semana {semana_inicio_mejor}")
 
 
 def opcion_6_prevision() -> None:
