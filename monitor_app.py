@@ -7,8 +7,8 @@ import logging
 # ---------------------------------------------------------------------------
 # Datos de la aplicación. Sustituid los del ejemplo APP-00 por los vuestros.
 # ---------------------------------------------------------------------------
-CODIGO: Final[str] = "APP-00"
-NOMBRE: Final[str] = "Agenda Escolar"
+CODIGO: Final[str] = "APP-07"
+NOMBRE: Final[str] = "Rutas en Bici"
 # Una posición por semana, de la 1 a la 12. 0 descargas: app retirada.
 DESCARGAS: Final = [1_600, 1_590, 0, 1_460, 1_520, 1_640, 1_580, 1_560,
                     1_610, 1_600, 1_790, 1_730]
