@@ -10,10 +10,9 @@ import logging
 CODIGO: Final[str] = "APP-00"
 NOMBRE: Final[str] = "Agenda Escolar"
 # Una posición por semana, de la 1 a la 12. 0 descargas: app retirada.
-DESCARGAS: Final = [1_600, 1_590, 0, 1_460, 1_520, 1_640,
-                    1_580, 1_560, 1_610, 1_600, 1_790, 1_730]
-CAIDAS: Final = [23, 15, 0, 33, 18, 20,
-                13, 6, 6, 30, 5, 6]
+DESCARGAS: Final = [1_600, 1_590, 0, 1_460, 1_520, 1_640, 1_580, 1_560,
+                    1_610, 1_600, 1_790, 1_730]
+CAIDAS: Final = [23, 15, 0, 33, 18, 20, 13, 6, 6, 30, 5, 6]
 
 
 # ---------------------------------------------------------------------------
@@ -47,14 +46,18 @@ PORCENTAJE: Final[int] = 100
 # ---------------------------------------------------------------------------
 # Excepciones propias de la pareja. Aquí va SemanaNoValida (opción 7).
 # ---------------------------------------------------------------------------
+
+
 class SemanaNoValida(ValueError):
-    """ Error cuando el usuario introduce una semana no válida"""
+    """Error cuando el usuario introduce una semana no válida"""
     pass
 
 # ---------------------------------------------------------------------------
 # Funciones auxiliares. tasa_caidas viene hecha; el resto, con su docstring,
 # las completáis vosotros. No cambiéis sus cabeceras.
 # ---------------------------------------------------------------------------
+
+
 def tasa_caidas(descargas: int, caidas: int) -> float:
     """Devuelve las caídas por cada mil descargas.
 
@@ -65,8 +68,8 @@ def tasa_caidas(descargas: int, caidas: int) -> float:
 
 def estado(descargas: int, caidas: int) -> str:
     """Devuelve el estado de una semana según su tasa de caídas.
-    Se usa un primer condicional para retornar mantenimiento y después con tasa caidas vamos
-    usando if y elif para ir devolviendo los estados. Se usa '<' porque los umbrales dicen menos de"""
+    las opciones son Mantenimiento, Estable, Aceptable,
+    revisar y Crítico"""
     if descargas == 0:
         return "Mantenimiento"
     tasa = tasa_caidas(descargas, caidas)
@@ -77,7 +80,7 @@ def estado(descargas: int, caidas: int) -> str:
     elif tasa < UMBRAL_REVISAR:
         return "Revisar"
     else:
-        return "Crítica"                  
+        return "Crítica"
 
 
 def pedir_entero(mensaje: str, minimo: int, maximo: int) -> int:
@@ -114,8 +117,7 @@ def pedir_real(mensaje: str, minimo: float, maximo: float) -> float:
             continue
         if minimo <= valor <= maximo:
             return valor
-        
-        print(f" Escribe un valor entre {minimo:.1f} y {maximo:.1f}")                   
+        print(f" Escribe un valor entre {minimo:.1f} y {maximo:.1f}")
 
 
 def semana_valida(texto: str) -> int:
@@ -143,7 +145,8 @@ def comprobar_datos() -> int:
         logging.error("Las listas no tienen la misma cantidad de semanas")
         errores += 1
 
-    for semana, (descargas, caidas) in enumerate(zip(DESCARGAS, CAIDAS), start=1):
+    for semana, (descargas, caidas) in enumerate(
+            zip(DESCARGAS, CAIDAS), start=1):
 
         if descargas < 0 or caidas < 0:
             logging.error(f"semana {semana}: hay valores negativos")
@@ -156,13 +159,13 @@ def comprobar_datos() -> int:
         if descargas == 0 and caidas == 0:
             logging.warning(f"semana {semana}: sin descargas (mantenimiento)")
 
-    return errores    
-
-
+    return errores
 
 # ---------------------------------------------------------------------------
 # Menú y opciones. La opción 1 viene hecha y la 2 tiene dos errores.
 # ---------------------------------------------------------------------------
+
+
 def mostrar_menu() -> None:
     """Esta funcion nos mostrara nuestro menu y sus opciones"""
     print("=" * ANCHO)
@@ -209,7 +212,7 @@ def opcion_2_resumen() -> None:
         total_caidas += caidas
         if descargas > mas:
             mas = descargas
-            semana_mas = semana 
+            semana_mas = semana
         if descargas < menos:
             menos = descargas
             semana_menos = semana
@@ -246,7 +249,7 @@ def opcion_3_estabilidad() -> None:
                 contador_criticas += 1
             case "Mantenimiento":
                 contador_mantenimiento += 1
-    
+
     print("-" * ANCHO)
     print(f"Estables: {contador_estables}")
     print(f"Aceptables: {contador_aceptables}")
@@ -257,7 +260,8 @@ def opcion_3_estabilidad() -> None:
 
 def opcion_4_umbral() -> None:
     """Muestra la primera semana en la que la tasa iguala o supera un umbral"""
-    umbral = pedir_real("Umbral en caídas (*1000): ",UMBRAL_MINIMO, UMBRAL_MAXIMO)
+    umbral = pedir_real("Umbral en caídas (*1000): ",
+                        UMBRAL_MINIMO, UMBRAL_MAXIMO)
     for semana, (descargas, caidas) in enumerate(
             zip(DESCARGAS, CAIDAS), start=1):
         if descargas == 0:
@@ -266,7 +270,7 @@ def opcion_4_umbral() -> None:
         if tasa >= umbral:
             print(f"Primera semana: {semana} --> ({tasa:.1f})%")
             break
-        
+
     else:
         print(f"Ninguna semana alcanza el {umbral:.1f}%")
 
@@ -295,11 +299,13 @@ def opcion_5_racha() -> None:
     if mejor_racha == 0:
         print("No ha habido ninguna semana que no haya tenido problemas")
     else:
-        print(f"Mejor racha: {mejor_racha} semanas, " f"desde la semana {semana_inicio_mejor}")
+        print(f"Mejor racha: {mejor_racha} semanas, "
+              f"desde la semana {semana_inicio_mejor}")
 
 
 def opcion_6_prevision() -> None:
-    """Calcula las semanas necesarias para alcanzar un objetivo de descargas."""
+    """Calcula las semanas necesarias para alcanzar
+    un objetivo de descargas."""
     ultima_descarga = 0
 
     for descargas in DESCARGAS:
@@ -346,7 +352,6 @@ def opcion_6_prevision() -> None:
         )
 
 
-
 def opcion_7_consulta() -> None:
     """Muestra los datos y el estado de una semana."""
 
@@ -358,7 +363,8 @@ def opcion_7_consulta() -> None:
         print(f"Error: {error}")
         return
 
-    for numero, (descargas, caidas) in enumerate(zip(DESCARGAS, CAIDAS), start=1):
+    for numero, (descargas, caidas) in enumerate(
+            zip(DESCARGAS, CAIDAS), start=1):
         if numero == semana:
 
             estado_semana = estado(descargas, caidas)
@@ -386,7 +392,6 @@ def opcion_7_consulta() -> None:
             break
 
 
-
 def opcion_8_comprobar() -> None:
     """Comprueba si los datos de la aplicación son correctos."""
 
@@ -398,11 +403,11 @@ def opcion_8_comprobar() -> None:
         print("Los datos tienen errores: corrígelos antes de continuar.")
 
 
-
 def main() -> None:
-    """Funcion principal que se encarga de ejecutar las diferentes funciones que hemos ido creando"""
-    
-    while(True):
+    """Funcion principal que se encarga de ejecutar
+    las diferentes funciones que hemos ido creando"""
+
+    while (True):
         mostrar_menu()
         try:
             opcion = int(input("Seleccione una opcion: "))
@@ -416,26 +421,25 @@ def main() -> None:
             print("Error: La opción introducida no existe")
             continue
 
-        if(opcion == 1):
+        if (opcion == 1):
             opcion_1_listado()
-        elif(opcion == 2):
+        elif (opcion == 2):
             opcion_2_resumen()
-        elif(opcion == 3):
+        elif (opcion == 3):
             opcion_3_estabilidad()
-        elif(opcion == 4):
+        elif (opcion == 4):
             opcion_4_umbral()
-        elif(opcion == 5):
+        elif (opcion == 5):
             opcion_5_racha()
-        elif(opcion == 6):
+        elif (opcion == 6):
             opcion_6_prevision()
-        elif(opcion == 7):
+        elif (opcion == 7):
             opcion_7_consulta()
-        elif(opcion == 8):
+        elif (opcion == 8):
             opcion_8_comprobar()
-        elif(opcion == 9):
+        elif (opcion == 9):
             print("SALIENDO...")
             break
-
 
 
 if __name__ == "__main__":
