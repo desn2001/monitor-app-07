@@ -46,7 +46,9 @@ PORCENTAJE: Final[int] = 100
 # ---------------------------------------------------------------------------
 # Excepciones propias de la pareja. Aquí va SemanaNoValida (opción 7).
 # ---------------------------------------------------------------------------
-
+class SemanaNoValida(ValueError):
+    """ Error cuando el usuario introduce una semana no válida"""
+    pass
 
 # ---------------------------------------------------------------------------
 # Funciones auxiliares. tasa_caidas viene hecha; el resto, con su docstring,
@@ -116,11 +118,16 @@ def pedir_real(mensaje: str, minimo: float, maximo: float) -> float:
 
 
 def semana_valida(texto: str) -> int:
-    """Convierte el texto en un número de semana de los datos.
+    """Comprueba que el número de semana sea válido."""
+    try:
+        semana = int(texto)
+    except ValueError:
+        raise SemanaNoValida("Debes introducir un número entero")
 
-    Lanza SemanaNoValida si no es un entero o está fuera de rango.
-    """
-    return 1                          # provisional
+    if 1 <= semana <= len(DESCARGAS):
+        return semana
+    else:
+        raise SemanaNoValida("La semana introducida no existe")
 
 
 def comprobar_datos() -> int:
@@ -320,8 +327,43 @@ def opcion_6_prevision() -> None:
 
 
 def opcion_7_consulta() -> None:
-    """[Docstring: qué hace esta opción.]"""
-    print(PENDIENTE)
+    """Muestra los datos y el estado de una semana."""
+
+    texto = input(f"Semana (1-{len(DESCARGAS)}): ")
+
+    try:
+        semana = semana_valida(texto)
+    except SemanaNoValida as error:
+        print(f"Error: {error}")
+        return
+
+    for numero, (descargas, caidas) in enumerate(zip(DESCARGAS, CAIDAS), start=1):
+        if numero == semana:
+
+            estado_semana = estado(descargas, caidas)
+
+            match estado_semana:
+                case "Estable":
+                    accion = "Sin acciones"
+                case "Aceptable":
+                    accion = "Vigilar en la próxima versión"
+                case "Revisar":
+                    accion = "Revisar los informes de errores"
+                case "Crítica":
+                    accion = "Publicar una versión correctora urgente"
+                case "Mantenimiento":
+                    accion = "La app no estuvo publicada esa semana"
+                case _:
+                    accion = "Estado desconocido"
+
+            print(f"Semana: {numero}")
+            print(f"Descargas: {descargas}")
+            print(f"Caídas: {caidas}")
+            print(f"Estado: {estado_semana}")
+            print(f"Acción: {accion}")
+
+            break
+
 
 
 def opcion_8_comprobar() -> None:
