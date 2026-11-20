@@ -102,8 +102,19 @@ def comprobar_datos() -> int:
 # Menú y opciones. La opción 1 viene hecha y la 2 tiene dos errores.
 # ---------------------------------------------------------------------------
 def mostrar_menu() -> None:
-    """[Docstring: qué hace esta función.]"""
-    print(PENDIENTE)
+    """Esta funcion nos mostrara nuestro menu y sus opciones"""
+    print("=" * ANCHO)
+    print(f"MONITOR DE {CODIGO} · {NOMBRE}".center(ANCHO))
+    print("=" * ANCHO)
+    print("1. Listado semanal")
+    print("2. Resumen")
+    print("3. Estabilidad por semana")
+    print("4. Primera semana que alcanza un umbral")
+    print("5. Mejor racha sin problemas")
+    print("6. Previsión de crecimiento")
+    print("7. Consultar una semana")
+    print("8. Comprobar los datos")
+    print("9. Salir")
 
 
 def opcion_1_listado() -> None:
@@ -124,9 +135,8 @@ def opcion_2_resumen() -> None:
     total_caidas = 0
     activas = 0
     mas = 0
-    semana_mas = 
+    semana_mas = 0
     menos = float('inf')
-    menos = float('inf') 
     semana_menos = 0
     for semana, (descargas, caidas) in enumerate(
             zip(DESCARGAS, CAIDAS), start=1):
@@ -183,12 +193,42 @@ def opcion_8_comprobar() -> None:
 
 
 def main() -> None:
-    """[Docstring: qué hace la función principal.]"""
-    # Provisional: sustituidlo por el bucle del menú (tarea 2).
-    mostrar_menu()
-    opcion_1_listado()
-    opcion_2_resumen()
-    print(PENDIENTE)
+    """Funcion principal que se encarga de ejecutar las diferentes funciones que hemos ido creando"""
+    
+    while(True):
+        mostrar_menu()
+        try:
+            opcion = int(input("Seleccione una opcion: "))
+        except ValueError:
+            print("Error: Debes introducir un numero entero")
+            continue
+        except KeyboardInterrupt:
+            print("Saliendo del programa...")
+            break
+        if opcion < 1 or opcion > OPCION_SALIR:
+            print("Error: La opción introducida no existe")
+            continue
+
+        if(opcion == 1):
+            opcion_1_listado()
+        elif(opcion == 2):
+            opcion_2_resumen()
+        elif(opcion == 3):
+            opcion_3_estabilidad()
+        elif(opcion == 4):
+            opcion_4_umbral()
+        elif(opcion == 5):
+            opcion_5_racha()
+        elif(opcion == 6):
+            opcion_6_prevision()
+        elif(opcion == 7):
+            opcion_7_consulta()
+        elif(opcion == 8):
+            opcion_8_comprobar()
+        elif(opcion == 9):
+            print("SALIENDO...")
+            break
+
 
 
 if __name__ == "__main__":
