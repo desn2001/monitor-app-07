@@ -23,7 +23,7 @@ No hace falta descargar el repositorio ni tener Python instalado. Solo Docker. E
 pide datos por teclado, así que se ejecuta con `-it`.
 
 ```bash
-docker run --rm -it [usuario]/monitor-app-07:1.0.0
+docker run --rm -it desn2001/monitor-app-07:1.0.0
 ```
 
 Página de la imagen: https://hub.docker.com/r/desn2001/monitor-app-07
