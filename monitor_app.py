@@ -35,7 +35,8 @@ OPCION_SALIR: Final[int] = 9
 # ---------------------------------------------------------------------------
 # Constantes de la pareja. Todo valor fijo del programa va aquí, con nombre.
 # ---------------------------------------------------------------------------
-
+UMBRAL_MINIMO: Final[float] = 0.0
+UMBRAL_MAXIMO: Final[float] = 1000.0
 
 
 # ---------------------------------------------------------------------------
@@ -87,7 +88,17 @@ def pedir_real(mensaje: str, minimo: float, maximo: float) -> float:
     Si se escribe algo que no es un número o está fuera de rango, avisa y
     lo vuelve a pedir.
     """
-    return minimo                     # provisional
+    while True:
+        texto = input(mensaje)
+        try:
+            valor = float(texto)
+        except ValueError:
+            print(f" '{texto}' no es un número. ")
+            continue
+        if minimo <= valor <= maximo:
+            return valor
+        
+        print(f" Escribe un valor entre {minimo:.1f} y {maximo:.1f}")                   
 
 
 def semana_valida(texto: str) -> int:
@@ -164,11 +175,11 @@ def opcion_2_resumen() -> None:
     tasa = tasa_caidas(total_descargas, total_caidas)
     print(f"Semanas activas:     {activas} de {len(DESCARGAS)}")
     print(f"Total de descargas:  {total_descargas}")
-    print(f"Media semanal:       {media:.1f}")
+    print(f"Media semanal:       {media:1f}")
     print(f"Más descargas:       semana {semana_mas} ({mas})")
     print(f"Menos descargas:     semana {semana_menos} ({menos})")
     print(f"Total de caídas:     {total_caidas}")
-    print(f"Tasa global:         {tasa:.1f} ‰")
+    print(f"Tasa global:         {tasa:1f} ‰")
 
 
 def opcion_3_estabilidad() -> None:
@@ -203,8 +214,19 @@ def opcion_3_estabilidad() -> None:
 
 
 def opcion_4_umbral() -> None:
-    """[Docstring: qué hace esta opción.]"""
-    print(PENDIENTE)
+    """Muestra la primera semana en la que la tasa iguala o supera un umbral"""
+    umbral = pedir_real("Umbral en caídas (*1000): ",UMBRAL_MINIMO, UMBRAL_MAXIMO)
+    for semana, (descargas, caidas) in enumerate(
+            zip(DESCARGAS, CAIDAS), start=1):
+        if descargas == 0:
+            continue
+        tasa = tasa_caidas(descargas, caidas)
+        if tasa >= umbral:
+            print(f"Primera semana: {semana} --> ({tasa:.1f})%")
+            break
+        
+    else:
+        print(f"Ninguna semana alcanza el {umbral:.1f}%")
 
 
 def opcion_5_racha() -> None:
