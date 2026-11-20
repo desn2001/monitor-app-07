@@ -3,7 +3,7 @@
 from typing import Final
 
 # Añadid aquí las importaciones que necesitéis.
-
+import logging
 # ---------------------------------------------------------------------------
 # Datos de la aplicación. Sustituid los del ejemplo APP-00 por los vuestros.
 # ---------------------------------------------------------------------------
@@ -136,7 +136,27 @@ def comprobar_datos() -> int:
     Registra cada error con logging.error y cada semana de mantenimiento
     con logging.warning.
     """
-    return 0                          # provisional
+    errores = 0
+
+    if len(DESCARGAS) != len(CAIDAS):
+        logging.error("Las listas no tienen la misma cantidad de semanas")
+        errores += 1
+
+    for semana, (descargas, caidas) in enumerate(zip(DESCARGAS, CAIDAS), start=1):
+
+        if descargas < 0 or caidas < 0:
+            logging.error(f"semana {semana}: hay valores negativos")
+            errores += 1
+
+        if caidas > descargas:
+            logging.error(f"semana {semana}: más caídas que descargas")
+            errores += 1
+
+        if descargas == 0 and caidas == 0:
+            logging.warning(f"semana {semana}: sin descargas (mantenimiento)")
+
+    return errores    
+
 
 
 # ---------------------------------------------------------------------------
@@ -367,8 +387,15 @@ def opcion_7_consulta() -> None:
 
 
 def opcion_8_comprobar() -> None:
-    """[Docstring: qué hace esta opción.]"""
-    print(PENDIENTE)
+    """Comprueba si los datos de la aplicación son correctos."""
+
+    errores = comprobar_datos()
+
+    if errores == 0:
+        print(f"Datos correctos: {len(DESCARGAS)} semanas")
+    else:
+        print("Los datos tienen errores: corrígelos antes de continuar.")
+
 
 
 def main() -> None:
