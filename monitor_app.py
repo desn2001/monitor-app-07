@@ -1,4 +1,4 @@
-"""[Docstring del módulo: una sola línea que diga qué hace el programa.]"""
+"""Analiza las descargas y los estados de las mismas de Rutas en bici"""
 
 from typing import Final
 
@@ -10,10 +10,11 @@ import logging
 CODIGO: Final[str] = "APP-00"
 NOMBRE: Final[str] = "Agenda Escolar"
 # Una posición por semana, de la 1 a la 12. 0 descargas: app retirada.
-DESCARGAS: Final = [1_200, 1_350, 1_280, 1_500, 0, 1_720,
-                    2_050, 1_810, 1_980, 2_310, 2_200, 2_150]
-CAIDAS: Final = [14, 12, 15, 9, 0, 22,
-                 31, 8, 6, 9, 5, 4]
+DESCARGAS: Final = [1_600, 1_590, 0, 1_460, 1_520, 1_640,
+                    1_580, 1_560, 1_610, 1_600, 1_790, 1_730]
+CAIDAS: Final = [23, 15, 0, 33, 18, 20,
+                13, 6, 6, 30, 5, 6]
+
 
 # ---------------------------------------------------------------------------
 # Datos del programa. Solo hay que cambiar AUTORES.

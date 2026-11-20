@@ -8,15 +8,15 @@ previsión de crecimiento, consulta de una semana y comprobación de los datos.
 
 **Módulo:** IC44 — Fundamentos de programación en Python
 **Unidad:** 2 — Estructuras de control, depuración y excepciones
-**Pareja:** [número]
-**Autores:** [usuario] · [usuario]
+**Pareja:** 07
+**Autores:** Juan Francisco García Díaz · Diego Esteban Sánchez Navarro
 
 ## Aplicación analizada
 
 | Dato | Valor |
 |---|---|
-| Código | [APP-XX] |
-| Nombre | [nombre] |
+| Código | APP-07 |
+| Nombre | Rutas en Bici |
 | Semanas | 12 |
 
 ## Ejecución desde Docker Hub
@@ -25,10 +25,10 @@ No hace falta descargar el repositorio ni tener Python instalado. Solo Docker. E
 pide datos por teclado, así que se ejecuta con `-it`.
 
 ```bash
-docker run --rm -it [usuario]/monitor-app-xx:1.0.0
+docker run --rm -it [usuario]/monitor-app-07:1.0.0
 ```
 
-Página de la imagen: https://hub.docker.com/r/[usuario]/monitor-app-xx
+Página de la imagen: https://hub.docker.com/r/desn2001/monitor-app-07
 
 ## Ejecución en local
 
@@ -43,8 +43,8 @@ python monitor_app.py
 ## Construir la imagen
 
 ```bash
-docker build -t monitor-app-xx .
-docker run --rm -it monitor-app-xx
+docker build -t monitor-app-07 .
+docker run --rm -it monitor-app-07
 ```
 
 ## Estructura del proyecto
